@@ -1,0 +1,158 @@
+// IMPORTS
+
+import java.util.Scanner;
+import java.util.Random;
+import Contas.ContaCorrente;
+import Contas.ContaPoupanca;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Random gerar = new Random();
+        char primeiraLetraOpcao;
+        int opcaoSwitch = -1;
+
+        do {
+            menuInterativo();
+            opcaoSwitch = sc.nextInt();
+
+        } while (opcaoSwitch != 0);
+
+    } // chave do main
+
+    public static void menuInterativo() {
+        System.out.println("|| ================= ||");
+        System.out.println("|| MENU DE OPERAÇÕES ||");
+        System.out.println("|| 1 -> Abrir Conta  ||");
+        System.out.println("|| 2 -> Consultar    ||");
+        System.out.println("|| 3 -> Sacar        ||");
+        System.out.println("|| 4 -> Depositar    ||");
+        System.out.println("|| 5 -> Transferir   ||");
+        System.out.println("|| 0 -> Sair         ||");
+        System.out.println("|| ================= ||");
+    }
+
+    public static void abrirConta() {
+        Scanner sc = new Scanner(System.in);
+        Random gerar = new Random();
+        boolean entradaValida = false;
+        do {
+            try {
+                System.out.println("C = Conta corrente");
+                System.out.println("P = Conta Poupanca");
+                String opcaoConta = sc.nextLine();
+                String opcaoUpper = opcaoConta.toUpperCase();
+                char primeiraLetraOpcao = opcaoUpper.charAt(0); // Pega só a primeira letra da opcao
+
+                entradaValida = true;
+
+                //conta corrente
+                if (primeiraLetraOpcao == 'C') {
+                    ContaCorrente contaCorrente = new ContaCorrente();
+                    System.out.print("Digite o nome titular: ");
+                    String nomeTitularC = sc.nextLine();
+                    contaCorrente.setTitular(nomeTitularC);
+                    int numC = gerar.nextInt(9999); // GERAR NÚMERO ALEATÓRIO
+                    contaCorrente.setNumeroConta(numC);
+                    System.out.println("Titular: " + contaCorrente.getTitular());
+                    System.out.println("Conta: " + contaCorrente.getNumeroConta());
+                    System.out.println("Saldo: " + contaCorrente.getSaldo());
+                    System.out.println("Conta aberta com sucesso! \n");
+
+                    //conta poupanca
+                } else if (primeiraLetraOpcao == 'P') {
+                    ContaPoupanca contaPoupanca = new ContaPoupanca();
+                    System.out.println("Digite o nome titular: ");
+                    String nomeTitularP = sc.nextLine();
+                    contaPoupanca.setTitular(nomeTitularP);
+                    int numP = gerar.nextInt(9999); // GERAR NÚMERO ALEATÓRIO
+                    contaPoupanca.setNumeroConta(numP);
+                    System.out.println("Conta: " + contaPoupanca.getTitular());
+                    System.out.println("Saldo: " + contaPoupanca.getSaldo());
+                    System.out.println("Conta aberta com sucesso! \n");
+                }
+
+            } catch (Exception e) {
+                System.out.println("Erro: Digite C ou P!");
+            }
+        } while (entradaValida = false);
+    }
+
+    public static void sacarCC(Scanner scan, ContaCorrente contaCorrente) {
+        System.out.println("Titular: " + contaCorrente.getTitular());
+        System.out.println("Conta: " + contaCorrente.getNumeroConta());
+        System.out.println("Saldo: " + contaCorrente.getSaldo());
+        System.out.println("Digite o valor que deseja sacar: ");
+        System.out.println("Tarifa Fixa de saque: " + contaCorrente.getTarifaFixa());
+        double valorCC = scan.nextDouble();
+        if (valorCC > (contaCorrente.getSaldo()) + contaCorrente.getTarifaFixa()) {
+            System.out.println("Saldo insuficiente");
+
+        }
+        double saldoAtualCC = contaCorrente.getSaldo() - (contaCorrente.getSaldo() + contaCorrente.getTarifaFixa());
+
+        System.out.println("Saldo: " + saldoAtualCC);
+    }
+
+    public static void sacarCP(Scanner scan, ContaPoupanca contaPoupanca) {
+        System.out.println("Titular: " + contaPoupanca.getTitular());
+        System.out.println("Conta: " + contaPoupanca.getNumeroConta());
+        System.out.println("Saldo: " + contaPoupanca.getSaldo());
+        System.out.println("Saldo mínimo pós saque: " + contaPoupanca.getSaldoMinimo());
+        System.out.println("\nDigite o valor que deseja sacar: ");
+        double valorCP = scan.nextDouble();
+        double saldoAtualCP = contaPoupanca.getSaldo() - valorCP;
+        if (saldoAtualCP < contaPoupanca.getSaldoMinimo()) {
+            System.out.println("Seu saldo final não pode ser menor que o valor de saldo mínimo!");
+            saldoAtualCP = contaPoupanca.getSaldo() + valorCP;
+        }
+        System.out.println("Saldo final: " + saldoAtualCP);
+
+    }
+
+    public static void depositarCC(Scanner scan, ContaCorrente contaCorrente) {
+        System.out.println("Digite o valor que deseja depositar: ");
+        double valorDepositoCC = scan.nextDouble();
+        System.out.println("Inserindo dinheiro na sua conta...");
+        double saldoDepositoCC = contaCorrente.getSaldo() + valorDepositoCC;
+        System.out.println("Saldo: " + saldoDepositoCC);
+    }
+
+    public static void depositarCP(Scanner scan, ContaPoupanca contaPoupanca) {
+        System.out.println("Digite o valor que deseja depositar: ");
+        double valorDepositoCP = scan.nextDouble();
+        System.out.println("Inserindo dinheiro na sua conta...");
+        double saldoDepositoCP = contaPoupanca.getSaldo() + valorDepositoCP;
+        System.out.println("Saldo: " + saldoDepositoCP);
+    }
+
+    public static void transferirCC(Scanner scan, ContaCorrente contaCorrente) {
+        System.out.println("Digite o valor que deseja transferir: ");
+        double valorTransferCC = scan.nextDouble();
+        System.out.println("Digite o número da conta-destino: ");
+        double contaDestinoCC = scan.nextDouble();
+        double saldoTransfCC = contaCorrente.getSaldo() - valorTransferCC;
+        System.out.println("Transferência feita!");
+        System.out.println("\nSaldo: " + saldoTransfCC);
+    }
+    public static void transferirCP(Scanner scan, ContaPoupanca contaPoupanca) {
+        System.out.println("Digite o valor que deseja transferir: ");
+        double valorTransferCP = scan.nextDouble();
+        System.out.println("Digite o número da conta-destino: ");
+        double contaDestinoCP = scan.nextDouble();
+        double saldoTransfCP = contaPoupanca.getSaldo() - valorTransferCP;
+        System.out.println("\nSaldo: " + saldoTransfCP);
+        System.out.println("Transferência feita!");
+
+    }
+    public static void consultarCC(ContaCorrente contaCorrente) {
+        System.out.println("Titular: " + contaCorrente.getTitular());
+        System.out.println("Conta: " + contaCorrente.getNumeroConta());
+        System.out.println("Saldo: " + contaCorrente.getSaldo());
+    }
+    public static void consultarCP(ContaPoupanca contaPoupanca) {
+        System.out.println("Titular: " + contaPoupanca.getTitular());
+        System.out.println("Conta: " + contaPoupanca.getNumeroConta());
+        System.out.println("Saldo: " + contaPoupanca.getSaldo());
+    }
+}
