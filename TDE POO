@@ -1,23 +1,59 @@
 // IMPORTS
-
+import java.util.map;
 import java.util.Scanner;
 import java.util.Random;
+import java.util.HashMap;
+import Contas.Conta;
 import Contas.ContaCorrente;
 import Contas.ContaPoupanca;
 
 public class Main {
     public static void main(String[] args) {
+    private static Map<Integer, Conta> bancoDeContas = new HashMap<>();
         Scanner sc = new Scanner(System.in);
         Random gerar = new Random();
         char primeiraLetraOpcao;
         int opcaoSwitch = -1;
 
-        do {
-            menuInterativo();
-            opcaoSwitch = sc.nextInt();
+    do {
+        menuInterativo();
+        try {
+            opcaoSwitch = Integer.parseInt(sc.nextLine()); // Melhor forma de ler números
 
-        } while (opcaoSwitch != 0);
+            switch (opcaoSwitch) {
+                case 1:
+                    abrirConta();
+                    break;
+                case 2:
+                    consultar();
+                    break;
+                case 3:
+                    sacar();
+                    break;
+                case 4:
+                    depositar();
+                    break;
+                case 5:
+                    // transferir(); // Implementar depois
+                    System.out.println("Funcionalidade de transferência ainda não implementada.");
+                    break;
+                case 0:
+                    System.out.println("Saindo do sistema...");
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Erro: por favor, digite um número válido.");
+            opcaoSwitch = -1; // Garante que o loop continue
+        }
+        System.out.println("\nPressione Enter para continuar...");
+        sc.nextLine();
 
+    } while (opcaoSwitch != 0);
+
+    sc.close();
+}
     } // chave do main
 
     public static void menuInterativo() {
